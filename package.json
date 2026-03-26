@@ -1,0 +1,61 @@
+{
+  "name": "mtopencode-plugin",
+  "version": "0.0.18",
+  "description": "OpenCode plugin",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "module": "./dist/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target bun --format esm && tsc --emitDeclarationOnly",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "bun run clean && bun run build",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "opencode",
+    "gomtm",
+    "audit"
+  ],
+  "author": "gomtm team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeh007/gomtm.git",
+    "directory": "packages/mtopencode-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/codeh007/gomtm/issues"
+  },
+  "homepage": "https://github.com/codeh007/gomtm/tree/main/packages/mtopencode-plugin#readme",
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.1.26",
+    "@supabase/supabase-js": "^2",
+    "zod": "catalog:"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.0.0"
+  }
+}

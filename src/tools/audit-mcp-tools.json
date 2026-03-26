@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "Audit MCP Tools",
+  "description": "MCP tools for accessing audit project data and context",
+  "tools": [
+    {
+      "name": "audit_project_context",
+      "description": "获取审计项目的完整上下文信息，包括项目基本信息、统计数据、资产概览、漏洞状态等。这为 Agent 提供项目的全面视图。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "审计项目ID"
+          }
+        },
+        "required": ["project_id"]
+      }
+    },
+    {
+      "name": "audit_assets_list",
+      "description": "获取审计项目中的资产列表，支持按类型、状态过滤。Agent 可以通过此工具了解当前已发现的攻击面。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "审计项目ID"
+          },
+          "asset_type": {
+            "type": "string",
+            "enum": ["domain", "ip", "url", "api_endpoint", "secret"],
+            "description": "资产类型过滤"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "confirmed", "false_positive"],
+            "description": "资产状态过滤"
+          },
+          "limit": {
+            "type": "number",
+            "default": 50,
+            "description": "返回结果数量限制"
+          }
+        },
+        "required": ["project_id"]
+      }
+    },
+    {
+      "name": "audit_findings_list",
+      "description": "获取审计项目中的漏洞发现列表，支持按严重程度、状态过滤。Agent 可以通过此工具了解已知的安全问题。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "审计项目ID"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"],
+            "description": "漏洞严重程度过滤"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["open", "confirmed", "fixed", "false_positive"],
+            "description": "漏洞状态过滤"
+          },
+          "limit": {
+            "type": "number",
+            "default": 50,
+            "description": "返回结果数量限制"
+          }
+        },
+        "required": ["project_id"]
+      }
+    },
+    {
+      "name": "audit_tasks_history",
+      "description": "获取审计项目的任务历史记录 (基于统一的任务面板)，了解之前的审计活动和结果。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "审计项目ID"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "queued", "running", "completed", "failed"],
+            "description": "任务状态过滤"
+          },
+          "limit": {
+            "type": "number",
+            "default": 20,
+            "description": "返回结果数量限制"
+          }
+        },
+        "required": ["project_id"]
+      }
+    },
+    {
+      "name": "audit_skills_available",
+      "description": "获取审计项目可用的技能列表，包括安全工具、POC脚本等。Agent 可以通过此工具了解可调用的审计能力。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "审计项目ID"
+          },
+          "category": {
+            "type": "string",
+            "description": "技能分类过滤（如：reconnaissance, vulnerability_scanning, exploitation）"
+          }
+        },
+        "required": ["project_id"]
+      }
+    },
+    {
+      "name": "audit_create_finding",
+      "description": "创建新的漏洞发现记录。当 Agent 在审计过程中发现安全问题时，可以使用此工具将发现记录到数据库中。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "审计项目ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "漏洞标题"
+          },
+          "description": {
+            "type": "string",
+            "description": "详细描述"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"],
+            "description": "严重程度"
+          },
+          "proof_poc": {
+            "type": "string",
+            "description": "复现步骤或POC"
+          },
+          "remediation": {
+            "type": "string",
+            "description": "修复建议"
+          },
+          "asset_id": {
+            "type": "string",
+            "description": "关联的资产ID（可选）"
+          }
+        },
+        "required": ["project_id", "title", "description", "severity"]
+      }
+    },
+    {
+      "name": "audit_add_asset",
+      "description": "添加新的资产记录。当 Agent 在侦察过程中发现新的攻击面时，可以使用此工具将其记录到数据库中。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "审计项目ID"
+          },
+          "asset_type": {
+            "type": "string",
+            "enum": ["domain", "ip", "url", "api_endpoint", "secret"],
+            "description": "资产类型"
+          },
+          "content": {
+            "type": "string",
+            "description": "资产内容（如域名、IP地址、URL等）"
+          },
+          "fingerprint": {
+            "type": "object",
+            "description": "技术栈指纹信息（JSON对象）"
+          },
+          "source": {
+            "type": "string",
+            "description": "发现来源（如：subfinder, nuclei, manual）"
+          }
+        },
+        "required": ["project_id", "asset_type", "content"]
+      }
+    }
+  ]
+}
