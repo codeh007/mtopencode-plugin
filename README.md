@@ -1,13 +1,16 @@
 # mtopencode-plugin
 
-OpenCode plugin for scheduling recurring jobs using `launchd` (macOS) or `systemd` (Linux). This plugin is part of the `gomtm` project.
+`mtopencode-plugin` is a standalone OpenCode plugin package extracted from the `gomtm` monorepo.
 
-## Features
+## Status
 
-- **Persistence**: Jobs survive system reboots.
-- **Reliability**: Self-correcting for missed runs (lap-up) if the system was inactive.
-- **Cross-platform**: Seamless support for both macOS and Linux.
-- **Integration**: Designed to work perfectly with OpenCode's MCP configuration and agent environment.
+This package is currently a lightweight skeleton. The repository now focuses on:
+
+- keeping the package independently versioned and published
+- providing a minimal smoke-test tool for OpenCode plugin loading
+- preserving the audit-related scaffolding for later work
+
+At the moment, the only exposed tool is a debug tool used to verify that the plugin loads successfully.
 
 ## Installation
 
@@ -15,25 +18,37 @@ OpenCode plugin for scheduling recurring jobs using `launchd` (macOS) or `system
 npm install mtopencode-plugin
 ```
 
-## Configuration
+## OpenCode configuration
 
-Add `mtopencode-plugin` to your OpenCode configuration file (typically `~/.config/opencode/config.json`):
+Add the package name to your OpenCode config:
 
 ```json
 {
-  "plugins": ["mtopencode-plugin"]
+  "plugin": ["mtopencode-plugin"]
 }
 ```
 
-## Usage
+## Available tool
 
-Once installed, the plugin adds several tools to your OpenCode agents:
+- `debug_plugin_status_v3`: returns a simple success message so you can confirm the plugin is loaded.
 
-- `job_schedule`: Create or update a recurring job using cron syntax.
-- `job_list`: List all currently scheduled jobs.
-- `job_delete`: Remove a scheduled job.
-- `job_run`: Trigger a job execution manually.
-- `job_logs`: View execution logs for a specific job.
+## Development
+
+```bash
+bun install
+bun run check
+```
+
+## Release flow
+
+- CI runs on every push and pull request.
+- npm publishing runs from GitHub Actions when a GitHub Release is published.
+- The workflow expects a repository secret named `NPM_TOKEN`.
+
+## Notes
+
+- Audit-related library code is still present in `src/lib/`, but it should be treated as scaffold code for future work.
+- No production secrets are stored in this repository.
 
 ## License
 

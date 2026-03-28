@@ -1,60 +1,62 @@
 {
   "name": "mtopencode-plugin",
   "version": "0.0.18",
-  "description": "OpenCode plugin",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "description": "OpenCode plugin package for gomtm-related tooling.",
   "type": "module",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
-  },
-  "publishConfig": {
-    "access": "public",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js"
-      }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --target bun --format esm && tsc --emitDeclarationOnly",
     "clean": "rm -rf dist",
-    "prepublishOnly": "bun run clean && bun run build",
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check": "bun run typecheck && bun run build",
+    "prepublishOnly": "bun run clean && bun run build"
   },
   "keywords": [
     "opencode",
+    "plugin",
     "gomtm",
     "audit"
   ],
-  "author": "gomtm team",
+  "author": "codeh007",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codeh007/gomtm.git",
-    "directory": "packages/mtopencode-plugin"
+    "url": "git+https://github.com/codeh007/mtopencode-plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/codeh007/gomtm/issues"
+    "url": "https://github.com/codeh007/mtopencode-plugin/issues"
   },
-  "homepage": "https://github.com/codeh007/gomtm/tree/main/packages/mtopencode-plugin#readme",
+  "homepage": "https://github.com/codeh007/mtopencode-plugin#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "bun@1.3.5",
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@opencode-ai/plugin": "^1.1.26",
-    "@supabase/supabase-js": "^2",
-    "zod": "catalog:"
+    "@supabase/supabase-js": "^2.57.4",
+    "zod": "^4.1.8"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "bun-types": "^1.3.5",
+    "typescript": "^5.8.2"
+  },
   "peerDependencies": {
     "@opencode-ai/plugin": ">=1.0.0"
   }
