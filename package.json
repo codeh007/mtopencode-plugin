@@ -1,6 +1,6 @@
 {
   "name": "mtopencode-plugin",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "OpenCode plugin package for gomtm-related tooling.",
   "type": "module",
   "main": "./dist/index.js",
